@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Cherri Chat</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="" rel="stylesheet">
+</head>
+<style>
+	@import url(https://fonts.googleapis.com/earlyaccess/notosanstc.css);
+	body{
+		padding: 0;
+		margin: 0;
+		font-family:'Noto Sans TC','微軟正黑體';
+			background:#f8f8f8;
+	}
+	.chatbody{
+	height: 100%;
+	min-height:80vh ;
+	overflow: auto;
+	background:#f8f8f8;
+	}
+	.chat_container{
+		width: 100%;
+		max-width: 1500px;
+		background: white;
+		height: 100%;
+		margin: 0 auto;
+		position: relative;
+	}
+	.chat_box{
+		height: 100%;
+		background: white;
+		width: 100%;
+		max-width: 1150px;
+		display: inline-block;
+		transform: translateX(350px);
+		position: relative;
+	}
+	.chat_box .chat_header{
+		
+		font-weight: 400;
+		margin: 0;
+		background: #4A90E2;
+		color: white;
+	}
+	.chat_box .chat_header h3{
+		font-size: 24px;
+		padding: 0px;
+		font-weight: 400;
+		margin: 0;
+		letter-spacing: 1px;
+		display: inline-block;
+		padding: 18px 20px;
+	}
+	.chat_header_status{
+		float: right;
+		color: white;
+	}
+	.chat_header_status ul{
+		display: inline-block;
+		margin: 0;
+		vertical-align: middle;
+		margin-right: 20px;
+	}
+	.chat_header_status ul li{
+		display: inline-block;
+		position: relative;
+		margin: 0 5px;
+	}
+	.chat_header_status ul li input {
+    visibility:hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+	}
+	.chat_header_status ul li label {
+	    cursor: pointer;
+	   
+	    border: 1px solid white;
+	    padding:5px 20px;
+	    font-size: 16px;
+	    margin: 0px;
+	    vertical-align: top;
+	    border-radius: 100px;
+
+	}
+	.chat_header_status ul li input:checked + label {
+    background: white;
+    color: #4A90E2; 
+    border: 1px solid white;
+}
+	.chat_header_status .user_name{
+		display: inline-block;
+		border-left: 1px solid #dcdcdc;
+	
+		padding: 15px 30px;
+	}
+	.chat_header_status .user_name span{
+			font-size: 24px;
+			vertical-align: middle;
+	}
+	.chat_header_status .user_name img{
+			width: 40px;
+		height:40px;
+		border: 1px solid white;
+		border-radius: 100px;
+		background: white;
+		display: inline-block;
+		vertical-align: middle;
+		margin-right: 5px;
+	}
+	.empty_block{
+		width: 100%;
+		height: 100%;
+		min-height: 80vh;
+		position: relative;
+		padding-top: 100px;
+	}
+	.empty_info{
+		display: inline-block;
+		text-align: center;
+		position: relative;
+		display: inline-block;
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		margin: 0 auto;
+		left: 0;
+		right: 0;
+	}
+	.empty_info h4{
+		font-size:24px;
+		letter-spacing: 3px;
+		color: #4A90E2;
+		margin:0 ;
+	}
+	.empty_info img{
+		width: 100%;
+		max-width: 300px;
+
+	}
+
+	.chat_box .chat_body{
+		/*height: 100%;*/
+		/*max-height: 100vh;*/
+		/*overflow-y: auto;*/
+		background: white;
+		 box-shadow: #ebebeb 5px 0px 15px 0px inset;  
+	}
+	.chat_bar{
+		background: white;
+		box-shadow: 0px 10px 10px #ebebeb;
+	}
+	
+	.chat_bar .chat_name{
+		display: inline-block;
+		border-left: 1px solid #dcdcdc;
+	
+		padding: 15px 30px;
+	}
+	.chat_bar .chat_name span{
+			font-size: 24px;
+			vertical-align: middle;
+	}
+	.chat_bar .chat_name img{
+			width: 40px;
+		height:40px;
+		border: 1px solid black;
+		border-radius: 100px;
+		background: white;
+		display: inline-block;
+		vertical-align: middle;
+		margin-right: 5px;
+	}
+	.chat_bar ul{
+		float: right;
+		list-style: none;
+		margin: 0;
+		padding: 18px 30px 12px 30px;
+	}
+	.chat_bar ul li{
+		display: inline-block;
+		margin: 0 5px;
+	}
+	.chat_bar ul li a {
+		display: inline-block;
+		margin-bottom: -10px;
+		border:1px solid white;
+	}
+	.chat_bar ul li a:focus {
+		border: 1px solid #d9d9d9;
+		background:#dcdcdc ;
+	}
+	.chat_bar ul li a img{
+		width: 40px;
+	}
+	.chat_bar .note_box{
+		position: absolute;
+		background: white;
+		box-shadow: 0 0 5px gray;
+		padding: 20px;
+		right: 30px;
+		z-index: 999999999999999;
+		transform: translateY(80px);
+
+	}
+	.chat_bar .note_box .arrow{
+		width: 0;
+height: 0;
+border-style: solid;
+border-width: 0 30px 30px 30px;
+border-color: transparent transparent rgba(0, 0, 0, 0.15) transparent;
+position: absolute;
+top: -30px;
+right: 0;
+
+}
+.chat_bar .note_box .arrow::after{
+
+content: "";
+
+border-style: solid;
+border-color: transparent transparent white transparent;
+border-width: 0 30px 30px 30px;
+position: relative;
+right: 30px;
+bottom: 21px;
+
+
+}
+	.chat_bar .note_box textarea{
+		width: 92% !important;
+		resize: none;
+		outline: 1px solid #4A90E2;
+		padding: 10px;
+		font-size: 18px;
+	}
+	.chat_bar .note_box button{
+		width: 100%;
+		font-size: 18px;
+		margin: 5px 0;
+		background: #4A90E2;
+		border: none;
+		color: white;
+		height: 50px;
+		font-family:'Noto Sans TC','微軟正黑體';
+		cursor: pointer;
+		outline: gray;
+
+
+	}
+	.chat_bar .note_box ul{
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		float: none;
+
+	}
+	.chat_bar .note_box ul li{
+	
+		display: block;
+		border: 1px solid #b7b7b7;
+		padding: 10px;
+		position: relative;
+		margin-top: 10px;
+
+	}
+	.chat_bar .note_box ul li a{
+		position: absolute;
+		top: 5px;
+		right: 10px;
+
+	}
+	.chat_bar .note_box ul li h5{
+		margin: 5px 0;
+		font-size: 16px ;
+		color: #4A90E2;
+
+
+	}
+	.chat_bar .note_box ul li a img{
+		width: 10px;
+		height: 10px;
+		
+
+	}
+	.search_bar{
+		border-bottom: 1px solid #ebebeb;
+		padding: 25px 30px;
+	
+	}
+
+	.search_bar input{
+		font-size: 25px;
+		border: none;
+		outline: none;
+		font-family:'Noto Sans TC','微軟正黑體';
+	}
+	.search_bar .search_result{
+		float: right ;
+		margin-top: 5px;
+	}
+	.search_bar .search_result span{
+		display: inline-block;
+		vertical-align: middle;
+		margin-bottom: 4px;
+		margin-right: 10px;
+		font-size: 18px;
+		letter-spacing: 2px;
+		color:#8d8d8d;
+	}
+	.search_bar .search_result a{
+		display: inline-block;
+		vertical-align: middle;
+
+	}
+	.search_bar .search_result a img{
+		width: 30px;
+	}
+	.chat_info{
+		width: 100%;
+	}
+	.mychat_outbox{
+		height: 70vh;
+		display: flex;
+		padding-top:50px;
+	}
+	.chat_info ul{
+		margin: 0;
+		max-height: 100%;
+		overflow-y:auto;
+		padding: 20px 30px;
+			width: 94.5%;
+			align-self: flex-end;
+
+			
+
+			
+
+	}
+	.chat_info ul li {
+		list-style: none;
+		margin: 20px 0;
+
+
+	}
+	.chat_info ul li b{
+		background: yellow;
+		color: black;
+
+
+	}
+	.chat_info ul  .first{
+		text-align: right;
+
+	}
+	.chat_info ul  .second{
+		text-align: left;
+
+	}
+	.chat_info ul li span{
+		font-size: 18px;
+		letter-spacing: 2px;
+		color: white;
+		background: #4A90E2;
+		padding: 5px 20px;
+		border-radius: 100px;
+		font-weight: 400;
+	}
+
+
+	.chat_insert{
+		border-top: 1px solid #ebebeb;
+		padding: 25px 30px;
+		width: 94.5%;
+	}
+	.chat_insert input{
+		font-size: 18px;
+		border: none;
+		outline: none;
+		font-family:'Noto Sans TC','微軟正黑體';
+	}
+	.chat_insert .chat_insert_sent{
+		float: right ;
+		margin-top: 5px;
+	}
+	.chat_insert .chat_insert_sent span{
+		display: inline-block;
+		vertical-align: middle;
+		margin-bottom: 4px;
+		margin-right: 10px;
+		font-size: 18px;
+		letter-spacing: 2px;
+		color:#8d8d8d;
+	}
+	.chat_insert .chat_insert_sent a{
+		display: inline-block;
+		vertical-align: middle;
+
+	}
+	.chat_insert .chat_insert_sent a img{
+		width: 30px;
+	}
+
+
+
+	.friend_box{
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 350px;
+		height: 100%;
+		background: white;
+		border-right: 1px solid #ebebeb;
+		/*box-shadow: 5px 0px 10px #ebebeb;*/
+
+		
+	}
+	.friend_box h3{
+		padding: 10px 20px;
+		font-weight: 300;
+		margin: 0;
+		letter-spacing: 1px;
+		border-bottom: 2px solid #d1d1d1;
+
+
+	}
+	.friend_box ul {
+		padding: 0;
+		margin: 0;
+		
+	}
+	.friend_box ul li{
+		list-style: none;
+		border-bottom: 1px solid #d1d1d1;
+		padding: 10px;
+		cursor: pointer;
+	}
+	.friend_box ul li a{
+		display: block;
+
+	}
+	.friend_box ul li:hover{
+		background: #d7d7d7;
+
+	}
+	.friend_box ul li img{
+		display: inline-block;
+		width: 50px;
+		height: 50px;
+		border: 1px solid #8d8d8d;
+		border-radius: 100px;
+		vertical-align: middle;
+		background:white;
+		overflow: hidden;
+
+	}
+	
+	.friend_box ul li .friend_info{
+		display: inline-block;
+		vertical-align: middle;
+		margin-left: 10px;
+
+	}
+	.friend_box ul li .friend_info h4{
+		margin: 0;
+		font-size: 22px;
+		color: black;
+
+	}
+	.friend_box ul li .friend_info p{
+		margin: 0;
+		letter-spacing: 1px;
+		color: #8d8d8d;
+		
+
+	}
+
+	
+</style>
+<body>
+    <div class="chatbody" id="chat">
+    	<div class="chat_container">
+    		<div class="chat_box">
+    			<div class="chat_header">
+    				<h3>Chat</h3>
+    				<div class="chat_header_status">
+    					<ul>
+    						<li>
+	                            <input type='radio' value='中文'  v-model="langnow" name='radio' id='radio_lan' checked/>
+	                            <label for='radio_lan'>中文</label>
+	                        </li>
+	                        <li>
+	                            <input type='radio' value='English'  v-model="langnow" name='radio' id='radio_lan2' />
+	                            <label for='radio_lan2'>English</label>
+	                        </li>
+    					</ul>
+    					<div class="user_name">
+    						<img src="" alt="">
+    						<span>高培軒</span>
+    						
+    					</div>
+    				</div>
+    				<div style="clear: both;"></div>
+    			</div>
+
+    			<div class="empty_block"  v-if="chatnow==''">
+    				 <div class="empty_info">
+						<img src="images/img_default.png" alt="">
+    				 	<h4>開始使用 Chat</h4>
+    				 </div>
+    			</div>
+    			
+    			<div class="chat_body" v-else>
+
+					<div class="chat_bar">
+    					<div class="chat_name">
+    						<img src="" alt="">
+    						<span>{{chatnow}}</span>
+    					</div>
+    					<ul>
+    						<li><a href="#" @click.prevent="show_box('search','block')" ><img src="images/ic_search.png" alt=""></a></li>
+    						<li><a href="#" @click.prevent="show_box('note','inline-block')"  ><img src="images/ic_note.png" alt=""></a>
+								<div class="note_box" id="note" style="display: none;" >
+									<div class="arrow"></div>
+									<textarea rows="4" cols="20" v-model="todothing" ></textarea>
+									<button @click="addlist(chatnow,todothing)">{{langgroup[3]}}</button>
+									<hr>
+									<ul>
+										<li  v-for="item in list_now">
+											<a href="#" @click.prevent="dellist(chatnow,item)"><img src="images/ic_close2.png" alt=""></a>
+											<h5>{{item.time}}</h5>
+											<p>{{item.info}}</p>
+										</li>
+										
+									</ul>
+								</div>
+    						</li>
+    					</ul>
+    					<div style="clear: both;"></div>
+					</div>
+					<div class="search_bar" id="search" style="display: none;">
+						<input type="text" :placeholder="[[  langgroup[2] ]]" @keyup.enter="findchat(search_now)" @keyup.delete="delsearch()"  v-model="search_now">
+						<div class="search_result">
+							<span>{{search_result.length}}{{langgroup[1]}}</span><a href="#" @click="delsearch()"><img src="images/ic_close1.png" alt=""></a>
+						</div>
+						<div style="clear: both;"></div>
+					</div>
+					<div class="chat_info">
+						<div  class="mychat_outbox" >
+							<ul id="mychat">
+								<li class="first" v-for="item in message_now"><span v-html="item"></span></li>
+								
+							</ul>
+						</div>
+						<div class="chat_insert">
+							<input type="text" placeholder="請輸入訊息...(尚無功能)" disabled>
+							<div class="chat_insert_sent">
+								<a href=""><img src="images/ic_sent.png" alt=""></a>
+							</div>
+							<div style="clear: both;"></div>
+						</div>
+						
+					</div>
+					
+    			</div>
+    		</div>
+    		<div class="friend_box">
+    			
+    		<h3>{{langgroup[0]}}(3)</h3>
+    		<ul>
+    			<li class="tagbox">
+    				<a href="#" @click.prevent="changechat('保羅',0);">
+    				<img src="" alt="">
+    				<div class="friend_info" >
+    					<h4>保羅</h4>
+    					<p>大家好我是保羅</p>
+    				</div>
+    				</a>
+    			</li>
+    			<li class="tagbox">
+    				<a href="#"  @click.prevent="changechat('捷克',1)" >
+    				<img src="" alt="">
+    				<div class="friend_info">
+    					<h4>捷克</h4>
+    					<p>大家好我是捷克</p>
+    				</div>
+    				</a>
+    			</li>
+    			<li class="tagbox"> 
+    				<a href="#"  @click.prevent="changechat('傑森',2)">
+    				<img src="" alt="">
+    				<div class="friend_info" >
+    					<h4>傑森</h4>
+    					<p>大家好我是傑森</p>
+    				</div>
+    				</a>
+    			</li>
+    		</ul>
+    		</div>
+    	
+    	</div>
+    	
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+	var apiurl='testjson.json'
+	var connect = new Vue({
+	  el:'#chat',
+	  data:{ 
+	    allarray:'',
+	    chatnow:'',
+	   	message_now: '',
+	   	alllist_array:'',
+	   	list_now:'',
+	   	search_now:'',
+	   	search_result:'',
+	   	todothing:'',
+	   	langnow:'中文',
+	    langgroup: ['好友列表','則相符訊息','輸入訊息','新增'],
+	    
+	  },
+	  updated(){
+ 			this.tobottom();
+	  },
+	  mounted(){
+	  	 axios
+	      .get(apiurl)
+	      .then((response)=>{
+
+	        this.allarray = response.data;
+	        this.alllist_array =this.allarray.map(function(index, elem) {
+          	return index['list'];
+        	});
+	     
+	      })
+	      .catch((error) =>{
+	        console.log('連線失敗'+error);
+	      })
+
+	  	
+	    
+
+	  },
+	  watch:{
+	  	chatnow(){
+	  		this.showchat();
+	  	
+	  		 this.showlist();
+	  		 this.delsearch();
+
+	  	},
+
+	  	langnow(){
+	  		if (this.langnow=='中文') {
+	  			this.langgroup[0]='好友列表';
+	  			this.langgroup[1]='則相符訊息';
+	  			this.langgroup[2]='輸入訊息';
+	  			this.langgroup[3]='新增';
+	  		}else if (this.langnow=='English') {
+	  			this.langgroup[0]='Friends List';
+	  			this.langgroup[1]='items';
+	  			this.langgroup[2]='Message';
+	  			this.langgroup[3]='Add';
+	  		}
+	  		
+	  	}
+	  },
+	  
+	  methods:{
+	    tobottom(){
+		var objDiv = document.getElementById("mychat");
+		objDiv.scrollTop = objDiv.scrollHeight;
+		},
+		showchat(){
+			var self=this;
+			if (self.chatnow =='保羅') {
+				self.message_now=(self.allarray[0].chat);
+				
+
+			}else if (self.chatnow =='捷克') {
+				self.message_now=(self.allarray[1].chat);
+			}else if (self.chatnow =='傑森') {
+				self.message_now=(self.allarray[2].chat);
+			}
+
+		
+		},
+		showlist(){
+			var self=this;
+			if (self.chatnow =='保羅') {
+				self.list_now=(self.alllist_array[0]);
+			}else if (self.chatnow =='捷克') {
+				self.list_now=(self.alllist_array[1]);
+			}else if (self.chatnow =='傑森') {
+				self.list_now=(self.alllist_array[2]);
+			}
+
+		},
+		show_box(id,status){
+			var self=this;
+			var a=document.getElementById(id);
+			if (a.style.display=="none") {
+				a.setAttribute('style', 'display: '+status)
+			}else{
+			a.setAttribute('style', 'display: none')
+			}
+	
+		},
+		changechat(name,num){
+			var self=this;
+			self.chatnow=name;
+			var a = document.getElementsByClassName('tagbox');
+			
+			for(var i=0; i < a.length; i++) {
+			 a[i].style.background="none"
+			}
+			
+			a[num].style.background="#d7d7d7";
+
+		},
+		findchat(searchthing){
+			var self=this; 
+
+	
+			self.search_result=self.message_now.filter(function(value) {
+
+			      return  value.match(searchthing);
+			 });
+			
+				
+			for(var i=0; i < self.message_now.length; i++) {
+			 self.message_now[i] = self.message_now[i].replace(searchthing, "<b>"+searchthing+"</b>");
+			}
+			
+
+
+		},
+		delsearch(){
+			var self=this; 
+			self.search_result="";
+			self.search_now="";
+			for(var i=0; i < self.message_now.length; i++) {
+			 self.message_now[i] = self.message_now[i].replace("<b>", "").replace("</b>", "");
+			}
+		},
+		addlist(name,todo){
+			var self=this; 
+			var d = new Date();
+			var mydate=d.toLocaleString();
+			if (name =='保羅') {
+				self.alllist_array[0].push({"time":mydate,"info":todo});
+			}else if (name =='捷克') {
+				self.alllist_array[1].push({"time":mydate,"info":todo});
+			}else if (name =='傑森') {
+				self.alllist_array[2].push({"time":mydate,"info":todo});
+			}
+			 self.showlist();
+      	},
+      	dellist(name,todo){
+      		var self=this; 
+      		if (name =='保羅') {
+				self.alllist_array[0].splice(self.alllist_array[0].indexOf(todo), 1);
+			}else if (name =='捷克') {
+				self.alllist_array[1].splice(self.alllist_array[1].indexOf(todo), 1);
+			}else if (name =='傑森') {
+				self.alllist_array[2].splice(self.alllist_array[2].indexOf(todo), 1);
+			}
+			 self.showlist();
+      	}
+      	
+	  }
+	})
+
+	
+</script>
+</html>
